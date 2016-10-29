@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace backend\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -21,6 +21,8 @@ use yii\db\ActiveRecord;
  */
 class Brand extends \yii\db\ActiveRecord
 {
+    public $file;
+
     public function behaviors()
     {
         return [
@@ -44,6 +46,7 @@ class Brand extends \yii\db\ActiveRecord
         return [
             [['name', 'slug', 'created_at', 'updated_at'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
+            [['file'], 'file', 'extensions' => 'png, jpg', 'mimeTypes' => 'image/jpeg, image/png'],
             [['name', 'slug', 'logo_url'], 'string', 'max' => 255],
         ];
     }
@@ -60,6 +63,7 @@ class Brand extends \yii\db\ActiveRecord
             'logo_url' => 'Logo Url',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'file' => 'Logo',
         ];
     }
 

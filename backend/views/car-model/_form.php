@@ -24,6 +24,8 @@ use common\models\BodyType;
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'brand_id')->dropDownList(ArrayHelper::map(Brand::find()->all(), 'id', 'name')) ?>
+    
+    <?= $form->field($model, 'files[]')->fileInput(['multiple' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

@@ -3,9 +3,9 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Brand;
 use backend\models\BrandSearch;
-use backend\models\BrandEdit;
+use backend\models\Brand;
+use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -64,9 +64,20 @@ class BrandController extends Controller
      */
     public function actionCreate()
     {
-        $model = new BrandEdit();
+        $model = new Brand();
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->file = UploadedFile::getInstance($model, 'file');
+            if ($model->file != null) {
+                $fileUrl = '/common/uploads/pictures/' . 'brand-' . time() . '.' . $model->file->extension;
+                $model->file->saveAs('../..' . $fileUrl);
+                $model->logo_url = $fileUrl;
+            }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->created_at = time();
+            $model->updated_at = time();
+            $model->file = null;
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -83,9 +94,19 @@ class BrandController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = new BrandEdit($this->findModel($id));
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->file = UploadedFile::getInstance($model, 'file');
+            if ($model->file != null) {
+                $fileUrl = '/common/uploads/pictures/' . 'brand-' . time() . '-' . substr(md5(rand()), 0, 7) . '.' . $model->file->extension;
+                $model->file->saveAs('../..' . $fileUrl);
+                $model->logo_url = $fileUrl;
+            }
+            
+            $model->updated_at = time();
+            $model->file = null;
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

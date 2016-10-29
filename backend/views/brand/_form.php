@@ -16,9 +16,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'logo_url')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'brandLogo')->fileInput() ?>
+    <?= $form->field($model, 'logo_url')->hiddenInput()->label(false) ?>
+    
+    <?php if ($model->logo_url != NULL): ?>
+    <img src=<?= $model->logo_url ?> alt="" />
+    <?php endif ?>
+    <?= $form->field($model, 'file')->fileInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

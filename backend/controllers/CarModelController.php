@@ -3,8 +3,10 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\CarModel;
+use backend\models\CarModel;
 use backend\models\CarModelSearch;
+use yii\base\Security;
+use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -65,7 +67,10 @@ class CarModelController extends Controller
     {
         $model = new CarModel();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->created_at = time();
+            $model->updated_at = time();
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -84,7 +89,21 @@ class CarModelController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->files = UploadedFile::getInstances($model, 'files');
+            
+            if (count($model->files) > 0) {
+                foreach ($model->files as $file) {
+                    $fileUrl = '/common/uploads/pictures/' . 'car_model-' . time() . '-' . substr(md5(rand()), 0, 7) . '.' . $file->extension;
+                    $file->saveAs('../..' . $fileUrl);
+                    // TODO: Создавать записи в таблице car_picture
+                }
+            }
+
+            $model->updated_at = time();
+            $model->files = null;
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
