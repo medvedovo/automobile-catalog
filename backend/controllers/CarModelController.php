@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\CarModel;
 use backend\models\CarModelSearch;
+use common\models\CarPicture;
 use yii\base\Security;
 use yii\web\UploadedFile;
 use yii\web\Controller;
@@ -71,6 +72,22 @@ class CarModelController extends Controller
             $model->created_at = time();
             $model->updated_at = time();
             $model->save();
+
+            $model->files = UploadedFile::getInstances($model, 'files');
+            if (count($model->files) > 0) {
+                foreach ($model->files as $file) {
+                    $fileUrl = '/common/uploads/pictures/' . 'car_model-' . time() . '-' . substr(md5(rand()), 0, 7) . '.' . $file->extension;
+                    $file->saveAs('../..' . $fileUrl);
+
+                    $carPicture = new CarPicture();
+                    $carPicture->car_picture_url = $fileUrl;
+                    $carPicture->car_model_id = $model->id;
+                    $carPicture->created_at = time();
+                    $carPicture->updated_at = time();
+                    $carPicture->save();
+                }
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -92,12 +109,17 @@ class CarModelController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             $model->files = UploadedFile::getInstances($model, 'files');
-            
             if (count($model->files) > 0) {
                 foreach ($model->files as $file) {
                     $fileUrl = '/common/uploads/pictures/' . 'car_model-' . time() . '-' . substr(md5(rand()), 0, 7) . '.' . $file->extension;
                     $file->saveAs('../..' . $fileUrl);
-                    // TODO: Создавать записи в таблице car_picture
+
+                    $carPicture = new CarPicture();
+                    $carPicture->car_picture_url = $fileUrl;
+                    $carPicture->car_model_id = $model->id;
+                    $carPicture->created_at = time();
+                    $carPicture->updated_at = time();
+                    $carPicture->save();
                 }
             }
 
