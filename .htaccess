@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteRule ^admin/(.*)$ backend/$1 [L]
+RewriteRule ^common/(.*)$ common/$1 [L]
+RewriteRule ^(.*)$ frontend/$1 [L]
