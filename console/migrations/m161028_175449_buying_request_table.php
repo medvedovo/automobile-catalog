@@ -18,7 +18,7 @@ class m161028_175449_buying_request_table extends Migration
             'brand_id' => $this->integer()->notNull(),
             'car_model_id' => $this->integer()->notNull(),
             'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull()
+            'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
 
         $this->createIndex('idx_brand', '{{%buying_request}}', array('brand_id', 'id'), true);

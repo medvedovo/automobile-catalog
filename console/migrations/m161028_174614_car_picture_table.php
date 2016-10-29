@@ -16,7 +16,7 @@ class m161028_174614_car_picture_table extends Migration
             'car_picture_url' => $this->string()->notNull(),
             'car_model_id' => $this->integer()->notNull(),
             'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull()
+            'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
 
         $this->createIndex('idx_car_model', '{{%car_picture}}', array('car_model_id', 'id'), true);

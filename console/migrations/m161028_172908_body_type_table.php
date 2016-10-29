@@ -15,7 +15,7 @@ class m161028_172908_body_type_table extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
             'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull()
+            'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
     }
 

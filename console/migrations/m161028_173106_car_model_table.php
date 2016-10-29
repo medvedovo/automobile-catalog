@@ -19,7 +19,7 @@ class m161028_173106_car_model_table extends Migration
             'description' => $this->text(),
             'brand_id' => $this->integer()->notNull(),
             'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull()
+            'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
 
         $this->createIndex('idx_brand', '{{%car_model}}', array('brand_id', 'id'), true);

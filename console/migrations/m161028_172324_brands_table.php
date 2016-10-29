@@ -17,7 +17,7 @@ class m161028_172324_brands_table extends Migration
             'slug' => $this->string()->notNull(),
             'logo_url' => $this->string()->notNull(),
             'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull()
+            'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
     }
 
