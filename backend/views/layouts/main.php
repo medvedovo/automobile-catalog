@@ -34,15 +34,15 @@ AppAsset::register($this);
             'class' => 'navbar-default navbar-fixed-top',
         ],
     ]);
-    $menuItems = [
-        ['label' => 'Заявки', 'url' => ['/buying-request/index']],
-        ['label' => 'Бренды', 'url' => ['/brand/index']],
-        ['label' => 'Кузова', 'url' => ['/body-type/index']],
-        ['label' => 'Модели', 'url' => ['/car-model/index']],
-    ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
+        $menuItems = [
+            ['label' => 'Заявки', 'url' => ['/buying-request/index']],
+            ['label' => 'Бренды', 'url' => ['/brand/index']],
+            ['label' => 'Кузова', 'url' => ['/body-type/index']],
+            ['label' => 'Модели', 'url' => ['/car-model/index']],
+        ];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(

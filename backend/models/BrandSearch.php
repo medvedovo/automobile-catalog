@@ -19,7 +19,7 @@ class BrandSearch extends Brand
     {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
-            [['name', 'slug', 'logo_url'], 'safe'],
+            [['name', 'slug'], 'safe'],
         ];
     }
 
@@ -65,8 +65,7 @@ class BrandSearch extends Brand
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'slug', $this->slug])
-            ->andFilterWhere(['like', 'logo_url', $this->logo_url]);
+            ->andFilterWhere(['like', 'slug', $this->slug]);
 
         return $dataProvider;
     }

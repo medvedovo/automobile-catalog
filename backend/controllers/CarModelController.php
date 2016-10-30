@@ -10,6 +10,7 @@ use yii\base\Security;
 use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
 /**
@@ -23,10 +24,21 @@ class CarModelController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'delete-picture'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'delete-picture' => ['POST'],
                 ],
             ],
         ];
@@ -105,6 +117,7 @@ class CarModelController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $pictures = CarPicture::find()->where(['car_model_id' => $id])->all();
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -130,6 +143,7 @@ class CarModelController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'pictures' => $pictures,
             ]);
         }
     }
@@ -145,6 +159,23 @@ class CarModelController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionDeletePicture()
+    {
+        if (Yii::$app->request->isAjax) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            $data = Yii::$app->request->post();
+            $carPicture = CarPicture::findOne($data['id']);
+
+            if ($carPicture != null) {
+                $carPicture->delete();
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     /**

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\BaseStringHelper;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\CarModelSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -34,7 +35,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'bodyType',
                 'value' => 'bodyType.name',
             ],
-            'description:ntext',
+            [
+                'attribute' => 'description',
+                'content' => function ($data) {
+                    return BaseStringHelper::truncate($data->description, 50, '…');
+                }
+            ],
             // 'created_at',
             // 'updated_at',
 
